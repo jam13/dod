@@ -17,43 +17,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html The GNU General Public License V3.0
  */
 
-class DefaultController extends CController
-{
-	public function actionDefault()
-	{
-		$favourites = Yii::app()->params['dod_favourites'];
-		if(rand(0,4)) {
-			$count = Disorder::model()->count();
-			$random = rand(1,$count);
-			$disorder = Yii::app()->db->createCommand()
-				->select('term,id')
-				->from('disorder')
-				->order('id')
-				->limit(1)
-				->offset($random)
-				->queryRow();
-		} else {
-			$count = count($favourites);
-			$random = rand(1,$count);
-			$disorder = Yii::app()->db->createCommand()
-				->select('term,id')
-				->from('disorder')
-				->where('id = :id', array(':id' => $favourites[$random-1]))
-				->queryRow();
-		}
-		$this->redirect('view/'.$disorder['id']);
-	}
-
-	public function actionView($id)
-	{
-		$disorder = Yii::app()->db->createCommand()
-		->select('term,id')
-		->from('disorder')
-		->where('id = :id', array(':id' => $id))
-		->queryRow();
-		if(!$disorder) {
-			throw new CHttpException(404, 'Disorder not found');
-		}
-		$this->renderPartial('default', array('term' => $disorder['term'], 'code'=>$disorder['id']));
-	}
-}
+return array(
+	'params' => array(
+		'dod_favourites' => array(
+			308006,
+			89183005
+		),
+	),
+);
